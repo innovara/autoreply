@@ -4,7 +4,7 @@
 
 autoreply.py works in tandem with Postfix as a filter.
 
-It sends auto-replies when a message sent to a qualifying email address enters the Postfix mail system.
+It sends auto-replies when a message sent to a qualifying email address, enters the Postfix mail system.
 
 In the proposed Postfix configuration, we make use of check_recipient_access to instruct Postfix to only pipe to autoreply.py emails which are sent to these qualifying email addresses. The script, using settings stored in autoreply.json, sends the auto-reply and re-injects the original email into Postfix for delivery.
 
