@@ -16,7 +16,7 @@ The following sections provide a detailed step-by-step guide on how to set up au
 
 ## Background
 
-One of our clients had a complex email infrastructure and they wanted a script that would trigger auto-replies when emails sent to some specific addresses entered one of their MTAs. Noramally, these would have been configured in the MDA/mailboxes instead.
+One of our clients had a complex email infrastructure and they wanted a script that would trigger auto-replies when emails sent to some specific addresses entered one of their MTAs. Normally, these would have been configured in the MDA/mailboxes instead.
 
 The MTA in question was Postfix. It would relay all emails and they could make configuration changes to this server safely.
 
