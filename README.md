@@ -4,7 +4,7 @@
 
 autoreply.py works in tandem with Postfix as a filter.
 
-It sends auto-replies when a message sent to a qualifying email address, enters the Postfix mail system.
+It sends auto-reply emails when a message sent to a qualifying email address enters the Postfix mail system.
 
 In the proposed Postfix configuration, we make use of check_recipient_access to instruct Postfix to only pipe to autoreply.py emails which are sent to these qualifying email addresses. The script, using settings stored in autoreply.json, sends the auto-reply and re-injects the original email into Postfix for delivery.
 
@@ -12,17 +12,17 @@ The look up table related to check_recipient_access is used for any mail receive
 
 autoreply.py could be easily adapted to do other things with the original email, instead of just passing it on, like extracting information or storing attachments.
 
-The following sections provide a detailed step-by-step guide on how to set up autoreply.py and Postfix.
+The following sections provide a detailed step-by-step guide on how to set up autoreply.py and Postfix to send auto-replies.
 
 ## Background
 
-One of our clients had a complex email infrastructure and they wanted a script that would trigger auto-replies when emails sent to some specific addresses entered one of their MTAs. Normally, these would have been configured in the MDA/mailboxes instead.
+One of our clients had a complex email infrastructure and they wanted a script that would trigger auto-replies when emails sent to some specific addresses entered one of their MTAs. Normally, these would have been configured at an MDA/mailbox level.
 
 The MTA in question was Postfix. It would relay all emails and they could make configuration changes to this server safely.
 
 After some consideration, it was deemed viable to use an after-queue content filter in Postfix to achieve this.
 
-As the email addresses that they would need to auto reply would change over time, as well as the subjects and wording of the email, we decided to use a JSON file to store that information which could be edited without having to change the script.
+As the email addresses that would need to auto-reply would change over time, as well as the subjects and wording of the auto-reply emails, we decided to use a JSON file to store that information which could be changed without having to edit the script.
 
 ## System configuration
 
@@ -84,7 +84,7 @@ Edit:
 * logging: on or off to enable/disable logging to ~/autoreply.log.
 * SMTP: if the server that will send the auto-reply emails is different from localhost.
 * email: email addresses that you want to send an auto-reply from.
-* reply-to: this is useful in case you want to use noreply@...
+* reply-to: the reply-to email address the auto-reply receivers will see. Useful when using noreply@...
 
 5. If you want to add a more email addresses, the JSON file would look something like this.
 ```json
@@ -176,4 +176,4 @@ autoreply unix  -       n       n       -       -       pipe
 ```shell
 sudo systemctl restart postfix
 ```
-You are ready to go. If everything has gone well, when Postfix receives emails addressed to your target auto-reply email addresses, it will pass them to autoreply.py and the script will send the auto-reply email according to your configuration.
+You are ready to go. If everything has gone well, when Postfix receives emails that are addressed to your target auto-reply recipients, it will pass them to autoreply.py and the script will send the auto-reply email according to your configuration.

@@ -44,13 +44,12 @@ def open_json():
   '''Opens ~/autoreply.json where settings are stored.'''
   try:
     # Opens ~/autoreply.json
-    with open(os.path.expanduser('~') + '/autoreply.json', 'r') as json_file:
+    with open(os.path.expanduser('~') + '/autoreply.json', 'r', encoding='utf-8') as json_file:
       data = json.load(json_file)
   # If the file .json doesn't exist, it creates a template
   except FileNotFoundError:
     create_json()
-    with open(os.path.expanduser('~') + '/autoreply.json', 'r') as json_file:
-      data = json.load(json_file)
+    sys.exit("Couldn't find ~/autoreply.json. New template created.")
   return data
 
 
@@ -129,28 +128,33 @@ def main():
   - sys.argv[2:] are the recipients, passed by Postfix as ${recipient} 
   - original email message is piped by Postfix over STDIN 
   
-  Include -l to generate logs under ~/autoreply.log
-  Use ./autoreply.py -j to generate a .json configuration file.
-  Use ./autoreply.py -t to generate a test email text file.
+  Use './autoreply.py -j' to generate a .json configuration file.
+  Use './autoreply.py -l' to show the content of the .json configuration file.
+  Use './autoreply.py -t' to generate a test email text file.
+  Use './autoreply.py from@bar to@bar < test.txt' to test autoreply.py. Note: edit test.txt first and replace from@bar and to@bar with your own 
   '''
   # If no parameters are passed, it prints some help
   if len(sys.argv) < 2:
-    print('Use:\n\
-    ./autoreply.py -j to generate a .json configuration file.\n\
-    ./autoreply.py -t to generate a test email text file.\n\
-    ./autoreply.py from@bar to@bar < test.txt\n')
+    print("Use:\n\
+    './autoreply.py -j' to generate a .json configuration file.\n\
+    './autoreply.py -l' to show the content of the .json configuration file.\n\
+    './autoreply.py -t' to generate a test email text file.\n\
+    './autoreply.py from@bar to@bar < test.txt' to test autoreply.py. Note: edit test.txt first and replace from@bar and to@bar with your own\n")
     exit()
   # Creates ~/autoreply.json if -j is passed
   if '-j' in sys.argv[1:]:
     create_json()
+  # Shows the content of ~/autoreply.json if -l is passed
+  if '-l' in sys.argv[1:]:
+    print(json.dumps(open_json(), indent=4))
   # Creates ~/test.txt if -t is passed
   if '-t' in sys.argv[1:]: 
     t_message = generate_email('bar@foo', 'foo@bar', 'bar@foo','This is a test email', 'This would be the autoreply body.')
     with open(os.path.expanduser('~') + '/test.txt', 'w', encoding='utf-8') as t_email:
       t_email.write(str(t_message))
-  # Exits if either -j or -t where passed
-  if '-j' in sys.argv[1:] or '-t' in sys.argv[1:]:
-    exit()
+  # Exits if -j, -l or -t were passed
+  if '-j' in sys.argv[1:] or '-l' in sys.argv[1:] or '-t' in sys.argv[1:]:
+    sys.exit()
   # Reads script settings
   settings = open_json()
   # Enables logging if 'logging': 'on'
