@@ -2,23 +2,21 @@
 
 ## Introduction
 
-autoreply.py works in tandem with Postfix as a filter.
+autoreply.py is a Postfix filter to send auto-reply emails when a message sent to a qualifying email address enters the Postfix mail system.
 
-It sends auto-reply emails when a message sent to a qualifying email address enters the Postfix mail system.
-
-In the proposed Postfix configuration, we make use of check_recipient_access to instruct Postfix to only pipe to autoreply.py emails which are sent to these qualifying email addresses. The script, using settings stored in autoreply.json, sends the auto-reply and re-injects the original email into Postfix for delivery.
+The proposed Postfix configuration uses check_recipient_access to instruct Postfix to pipe only emails that are sent to these qualifying email addresses to autoreply.py, leaving the rest continue their normal flow. The script, using settings stored in autoreply.json, sends the auto-reply and re-injects the original email into Postfix for delivery.
 
 The look up table related to check_recipient_access is used for any mail received by SMTP but not for emails sent locally, using sendmail.
 
-autoreply.py could be easily adapted to do other things with the original email, instead of just passing it on, like extracting information or storing attachments.
+autoreply.py could be easily adapted to do other things with the original email like extracting information or storing attachments.
 
-The following sections provide a detailed step-by-step guide on how to set up autoreply.py and Postfix to send auto-replies.
+The following sections provide a step-by-step guide on how to set up autoreply.py and Postfix to send auto-replies.
 
 ## Background
 
-One of our clients had a complex email infrastructure and they wanted a script that would trigger auto-replies when emails sent to some specific addresses entered one of their MTAs. Normally, these would have been configured at an MDA/mailbox level.
+One of our clients had a complex email infrastructure and they wanted a script that would trigger auto-replies when emails sent to some specific addresses entered one of their MTAs. Normally, these auto-replies would have been configured at an MDA/mailbox level.
 
-The MTA in question was Postfix. It would relay all emails and they could make configuration changes to this server safely.
+The MTA in question was Postfix and it relayed all the emails to another SMTP server which they couldn't/wanted to configure differently.
 
 After some consideration, it was deemed viable to use an after-queue content filter in Postfix to achieve this.
 
@@ -68,8 +66,13 @@ nano autoreply.json
 ```
 ```json
 {
-    "logging": "off",
+    "logging": false,
     "SMTP": "localhost",
+    "port": 25,
+    "starttls": false,
+    "smtpauth": false,
+    "username": "user",
+    "password": "pass",
     "autoreply": [
         {
             "email": "foo@bar",
@@ -81,16 +84,26 @@ nano autoreply.json
 }
 ```
 Edit:
-* logging: on or off to enable/disable logging to ~/autoreply.log.
+* logging: true or false to enable/disable logging to ~/autoreply.log.
 * SMTP: if the server that will send the auto-reply emails is different from localhost.
+* port: the SMTP port if not using 25.
+* starttls: true to enable STARTTLS if required.
+* smtpauth: true if authentication is required.
+* username: your username if authentication is required.
+* password: your password if authentication is required.
 * email: email addresses that you want to send an auto-reply from.
 * reply-to: the reply-to email address the auto-reply receivers will see. Useful when using noreply@...
 
-5. If you want to add a more email addresses, the JSON file would look something like this.
+5. If you want to add more email addresses, the JSON file would look something like this.
 ```json
 {
-    "logging": "off",
+    "logging": false,
     "SMTP": "localhost",
+    "port": 25,
+    "starttls": false,
+    "smtpauth": false,
+    "username": "user",
+    "password": "pass",
     "autoreply": [
         {
             "email": "foo@bar",
@@ -107,7 +120,7 @@ Edit:
     ]
 }
 ```
-6. If you want to create an email file for testing, run ./autoreply.py -t and edit From, To and Reply-to accordingly.
+6. If you want to create an email file for testing, use ./autoreply.py -t and edit test.txt to change From, To and Reply-to accordingly.
 ```shell
 ./autoreply.py -t
 nano test.txt
@@ -126,7 +139,7 @@ exit
 
 ## Postfix configuration
 
-Now you have to edit the configuration of the Postfix server to pipe emails to the script.
+Now, you have to edit the configuration of the Postfix server to pipe emails to the script.
 
 You could pipe all the emails to autoreply.py, but the script would unnecessarily handle a number of emails that would not trigger an auto-reply. 
 To avoid emails out of the scope of autoreply.py being piped to it, we use check_recipient_access under smtpd_recipient_restrictions in main.cf.
@@ -159,7 +172,7 @@ smtpd_recipient_restrictions = check_recipient_access hash:/etc/postfix/autorepl
 ```
 7. Back up master.cf
 ```
-sudo cp /etc/postfix/master.cf /etc/postfix/master.cf.bak
+sudo cp /etc/postfix/master.{cf,cf.bak}
 ```
 8. Edit /etc/postfix/master.cf
 ```shell
