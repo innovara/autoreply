@@ -4,6 +4,7 @@ import smtplib
 import sys
 import json
 import os.path
+from os import chmod
 from email import message_from_file
 from email.message import EmailMessage
 from email.utils import make_msgid
@@ -43,6 +44,7 @@ def create_json():
   })
   with open(json_path, 'w', encoding='utf-8') as out_file:
     json.dump(data, out_file, indent=4)
+  chmod(json_path, 0o600)
 
 
 def open_json():
