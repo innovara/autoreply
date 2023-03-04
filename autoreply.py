@@ -119,12 +119,8 @@ def check_autoreply(message, original_id):
   '''For more information please see https://www.arp242.net/autoreply.html'''
   # Defined in RFC 3834. ‘Official’ standard to indicate a message is an autoreply
   log('checking autoreply or automated headers on ' + str(original_id))
-  if message['Auto-submitted'] != 'no':
-    log('Auto-submitted present, not sending autoreply')
-    return True
-  # Other non RFC-compliant Auto-submitted headers
-  elif message['X-Autoreply'] != None or message['X-Autorespond'] != None:
-    log('X-Autoreply or X-Autorespond present, not sending autoreply')
+  if message['Auto-submitted'] != None and message['Auto-submitted'] != 'no':
+    log('Auto-submitted present and not \'no\', not sending autoreply')
     return True
   # Defined by Microsoft. Header used by Microsoft Exchange, Outlook, and perhaps others
   elif message['X-Auto-Response-Suppress'] in ('DR', 'AutoReply', 'All'):
@@ -141,6 +137,10 @@ def check_autoreply(message, original_id):
   # Mentioned in RFC 2076 where its use is discouraged, but this header is commonly encountered
   elif str(message['Precedence']).lower() in ('bulk', 'auto_reply', 'list'):
     log('Precedence is bulk, auto_reply or list, not sending autoreply')
+    return True
+  # Other non RFC-compliant Auto-submitted headers
+  elif message['X-Autoreply'] != None or message['X-Autorespond'] != None:
+    log('X-Autoreply or X-Autorespond present, not sending autoreply')
     return True
   else:
     log('no autoreply or automated headers found on ' + str(original_id))
