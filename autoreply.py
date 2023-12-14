@@ -20,6 +20,29 @@ def log(message):
     with open(log_file, 'a+', encoding='utf-8') as log:
       log.write(now + ': ' + message + '\n')
 
+def create_html():
+  '''Creates ~/autoreply.html'''
+  html_file = 'autoreply.html'
+  html_path = os.path.join(os.path.expanduser('~'), html_file)
+  if os.path.isfile(html_path) is True:
+    os.replace(html_path, os.path.join(os.path.expanduser('~'), 'autoreply.html.bak'))
+  html_content = '''<html>
+  <head></head>
+  <body>
+    <p>Thank you for contacting us.<p>
+    <p>We have received your message and will be in touch soon.</p>
+    <p>Regards,</p>
+    <p><b>Your company</b></p>
+    <!- Want a logo? Encode your image here: https://elmah.io/tools/base64-image-encoder (no affiliation whatsoever)
+        and replace the base64 string accordingly  -->
+  <img src="data:image/png;base64, 
+  iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAwXpUWHRSYXcgcHJvZmlsZSB0eXBlIGV4aWYAAHjabVBRDsMgCP3nFDsCAioex7Yu2Q12/KHSpm57CU/kkScC7f16wqODgoDErKmkhAYpUqhaojhRBweUwQNMroW1DpdAVuLeOa+avP+sh8tgHtWyeDPS3YVtFYq4v34Z+cPcJ+r54UZlv0YeQnCDOr+FqWi+f2FruEJnQCfRdeyfe7btHdHeYaLGgdGYOc0BuAcDVxNosFijseXIOji7mS3k355OwAfhmFkT34ZaJgAAAYRpQ0NQSUNDIHByb2ZpbGUAAHicfZE9SMNAGIbfppWKVAXtIOKQoTrZRUUctQpFqBBqhVYdTC79gyYNSYqLo+BacPBnserg4qyrg6sgCP6AuLo4KbpIid8lhRYx3nHcw3vf+3L3HSA0KkyzQrOApttmOpkQs7lVMfyKCPpohjAgM8uYk6QUfMfXPQJ8v4vzLP+6P0evmrcYEBCJZ5lh2sQbxNObtsF5nzjKSrJKfE48btIFiR+5rnj8xrnossAzo2YmPU8cJRaLHax0MCuZGvEUcUzVdMoXsh6rnLc4a5Uaa92TvzCS11eWuU5rBEksYgkSRCiooYwKbMRp10mxkKbzhI9/2PVL5FLIVQYjxwKq0CC7fvA/+N1bqzA54SVFEkDXi+N8jALhXaBZd5zvY8dpngDBZ+BKb/urDWDmk/R6W4sdAf3bwMV1W1P2gMsdYOjJkE3ZlYK0hEIBeD+jb8oBg7dAz5rXt9Y5Th+ADPUqdQMcHAJjRcpe93l3d2ff/q1p9e8HNl5yjq9GWD8AAA14aVRYdFhNTDpjb20uYWRvYmUueG1wAAAAAAA8P3hwYWNrZXQgYmVnaW49Iu+7vyIgaWQ9Ilc1TTBNcENlaGlIenJlU3pOVGN6a2M5ZCI/Pgo8eDp4bXBtZXRhIHhtbG5zOng9ImFkb2JlOm5zOm1ldGEvIiB4OnhtcHRrPSJYTVAgQ29yZSA0LjQuMC1FeGl2MiI+CiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogIDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSIiCiAgICB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIKICAgIHhtbG5zOnN0RXZ0PSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VFdmVudCMiCiAgICB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iCiAgICB4bWxuczpHSU1QPSJodHRwOi8vd3d3LmdpbXAub3JnL3htcC8iCiAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyIKICAgIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyIKICAgeG1wTU06RG9jdW1lbnRJRD0iZ2ltcDpkb2NpZDpnaW1wOmYwZWEwMzk0LTJjNzItNGRhZi1iOWNkLTJmODg2MzYzNGEwOSIKICAgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDphZjAwMDNhOC0yNDU3LTRmYjYtYjNiMy01MmVkOTVhZDdlM2EiCiAgIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo5MDM1YmU5ZC04OWJjLTQyN2YtODJjYi03NzRiZjc1MTU2NjQiCiAgIGRjOkZvcm1hdD0iaW1hZ2UvcG5nIgogICBHSU1QOkFQST0iMi4wIgogICBHSU1QOlBsYXRmb3JtPSJMaW51eCIKICAgR0lNUDpUaW1lU3RhbXA9IjE3MDI1NjI4ODc0MzQwMDEiCiAgIEdJTVA6VmVyc2lvbj0iMi4xMC4zNiIKICAgdGlmZjpPcmllbnRhdGlvbj0iMSIKICAgeG1wOkNyZWF0b3JUb29sPSJHSU1QIDIuMTAiCiAgIHhtcDpNZXRhZGF0YURhdGU9IjIwMjM6MTI6MTRUMTQ6MDg6MDcrMDA6MDAiCiAgIHhtcDpNb2RpZnlEYXRlPSIyMDIzOjEyOjE0VDE0OjA4OjA3KzAwOjAwIj4KICAgPHhtcE1NOkhpc3Rvcnk+CiAgICA8cmRmOlNlcT4KICAgICA8cmRmOmxpCiAgICAgIHN0RXZ0OmFjdGlvbj0ic2F2ZWQiCiAgICAgIHN0RXZ0OmNoYW5nZWQ9Ii8iCiAgICAgIHN0RXZ0Omluc3RhbmNlSUQ9InhtcC5paWQ6OTc3NTQ0YTItYjEyMi00NTVmLWJhMDEtZjFkMGI3YTc4N2U5IgogICAgICBzdEV2dDpzb2Z0d2FyZUFnZW50PSJHaW1wIDIuMTAgKExpbnV4KSIKICAgICAgc3RFdnQ6d2hlbj0iMjAyMy0xMi0xNFQxNDowODowNyswMDowMCIvPgogICAgPC9yZGY6U2VxPgogICA8L3htcE1NOkhpc3Rvcnk+CiAgPC9yZGY6RGVzY3JpcHRpb24+CiA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgCjw/eHBhY2tldCBlbmQ9InciPz6hgEyBAAAAllBMVEXNZFUAAACBgYGBgYGAgICFhYWAgICBgYGAgICAgICOjo6CgoKAgICAgICBgYGAgICAgICBgYGAgICAgICCgoKAgICBgYGAgICAgID/AACAgICDfHyId3fwDw+kW1vrFRX1CgrlGhq6RkbOMjLfICDBPj6yTk6YaGiOcnL8AwOeYWGrVVWTbW3+AQH5BwfZJibIODjUKytFbytpAAAAAXRSTlMAQObYZgAAAAFiS0dEAIgFHUgAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAHdElNRQfnDA4OCAe+mSkJAAAAs0lEQVRIx+2WSwrDMAwFc423MI5BW5H7364hNBCKP9JA6aazziD8Ikveth9hrbguvDQLCPX9+Y3XlaAOM6lpQBsZu4bsXeFwTfCjk9PUOB3L1ejWWRqnEz75IIOmEM+sFWTxz+d9IGXL1LhS4wF/BG1KYJmEnzmXjFKyR7kPoxR/BYUMfiVoGNCWoPnJFQMXmYwLMJTI6AMDloxxsizASiKLj6xXtMTJU+GqlH2QoGfPV3gBX0Gsgyg+EM0AAAAASUVORK5CYII=
+  " alt="Red dot" />
+  </body>
+</html>'''
+  with open(html_path, 'w', encoding='utf-8') as out_file:
+    out_file.write(html_content)
+
 
 def create_json():
   '''Creates ~/autoreply.json.'''
@@ -38,9 +61,12 @@ def create_json():
   data['autoreply'] = []
   data['autoreply'].append({
     'email': 'foo@bar',
+    'from': 'Foo Bar <foo@bar>',
     'reply-to': 'foo@bar',
     'subject': 'Subject here',
-    'body': 'Email body here'
+    'body': 'Email body here',
+    'html': False,
+    '_comment': 'If you set html to true, set body to the full path of your html file'
   })
   with open(json_path, 'w', encoding='utf-8') as out_file:
     json.dump(data, out_file, indent=4)
@@ -60,9 +86,8 @@ def open_json():
   return data
 
 
-def generate_email(sender, recipient, original_id, replyto, subject, body, attachment_path=None, test=False):
+def generate_email(sender, recipient, original_id, replyto, subject, body, html, attachment_path=None, test=False):
   '''Creates an email message object with an attachement (optional).'''
-  # TODO: HTML body with formatting instead of plain text?
   message = EmailMessage()
   # Email headers
   message['From'] = sender
@@ -76,7 +101,14 @@ def generate_email(sender, recipient, original_id, replyto, subject, body, attac
     message['X-Autoreply'] = 'yes'
     message['X-Auto-Response-Suppress'] = 'All'
     message['Precedence'] = 'auto_reply'
-  message.set_content(body)
+  if html == False:
+    message.set_content(body)
+  elif html == True:
+    try:
+      with open(body, encoding='utf-8') as html_body:
+        message.set_content(html_body.read(), subtype='html')
+    except FileNotFoundError:
+      log(str(body) + ' doesn\'t exist. Check path.')
   # Process the attachment and add it to the email
   if attachment_path != None:
     attachment_filename = os.path.basename(attachment_path)
@@ -163,12 +195,13 @@ def autoreply(sender, recipients, original_id):
       if recipient['email'] != sender:
         # Generates and email message with the settings from ~/autoreply.json
         message = generate_email(
-          recipient['email'],
+          recipient['from'],
           sender,
           original_id,
           recipient['reply-to'],
           recipient['subject'],
-          recipient['body']
+          recipient['body'],
+          recipient['html']
           )
         #Sends auto-reply email
         send_email(message)
@@ -181,19 +214,24 @@ def main():
   - sys.argv[2:] are the recipients, passed by Postfix as ${recipient} 
   - original email message is piped by Postfix over STDIN 
   
-  Use './autoreply.py -j' to generate a .json configuration file.
-  Use './autoreply.py -l' to show the content of the .json configuration file.
+  Use './autoreply.py -b' to generate a sample HTML body.
+  Use './autoreply.py -j' to generate a JSON configuration file.
+  Use './autoreply.py -l' to show the content of the JSON configuration file.
   Use './autoreply.py -t' to generate a test email text file.
   Use './autoreply.py from@bar to@bar < test.txt' to test autoreply.py. Note: edit test.txt first and replace from@bar and to@bar with your own 
   '''
   # If no parameters are passed, it prints some help
   if len(sys.argv) < 2:
     print("Use:\n\
-    './autoreply.py -j' to generate a .json configuration file.\n\
-    './autoreply.py -l' to show the content of the .json configuration file.\n\
+    './autoreply.py -b' to generate a sample HTML body.\n\
+    './autoreply.py -j' to generate a JSON configuration file.\n\
+    './autoreply.py -l' to show the content of the JSON configuration file.\n\
     './autoreply.py -t' to generate a test email text file.\n\
     './autoreply.py from@bar to@bar < test.txt' to test autoreply.py. Note: edit test.txt first and replace from@bar and to@bar with your own\n")
     exit()
+  # Creates ~/autoreply.html if -b is passed
+  if '-b' in sys.argv[1:]:
+    create_html()
   # Creates ~/autoreply.json if -j is passed
   if '-j' in sys.argv[1:]:
     create_json()
@@ -205,8 +243,8 @@ def main():
     t_message = generate_email('from@bar', 'to@bar', 'from@foo','This is a test email', 'This is an email to test autoreply.py', test=True)
     with open(os.path.expanduser('~') + '/test.txt', 'w', encoding='utf-8') as t_email:
       t_email.write(str(t_message))
-  # Exits if -j, -l or -t were passed
-  if '-j' in sys.argv[1:] or '-l' in sys.argv[1:] or '-t' in sys.argv[1:]:
+  # Exits if -b, -j, -l or -t were passed
+  if '-b' in sys.argv[1:] or '-j' in sys.argv[1:] or '-l' in sys.argv[1:] or '-t' in sys.argv[1:]:
     sys.exit()
   # Reads script settings
   settings = open_json()
@@ -228,7 +266,6 @@ def main():
   # Message object
   original_msg = message_from_bytes(binary_msg)
   original_id = (original_msg['Message-ID']).replace("\r","").replace("\n", "").replace(" ","")
-  print(original_msg)
   # Re-injects original email into Postfix.
   # If the purpose of the script was to do something else with the original email, re-injecting should be done later
   reinject_email(binary_msg, sender, recipients, original_id)
