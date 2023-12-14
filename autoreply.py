@@ -227,7 +227,8 @@ def main():
   binary_msg = sys.stdin.buffer.read()
   # Message object
   original_msg = message_from_bytes(binary_msg)
-  original_id = original_msg['Message-ID']
+  original_id = (original_msg['Message-ID']).replace("\r","").replace("\n", "").replace(" ","")
+  print(original_msg)
   # Re-injects original email into Postfix.
   # If the purpose of the script was to do something else with the original email, re-injecting should be done later
   reinject_email(binary_msg, sender, recipients, original_id)
