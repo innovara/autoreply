@@ -2,15 +2,17 @@
 
 ## Introduction
 
-autoreply.py is a Postfix filter to send auto-reply emails when a message sent to a qualifying email address enters the Postfix mail system.
+`autoreply.py` is a Postfix filter to send auto-reply emails when a message sent to a qualifying email address enters the Postfix mail system.
 
-The proposed Postfix configuration uses check_recipient_access to instruct Postfix to pipe only emails that are sent to these qualifying email addresses to autoreply.py, leaving the rest continue their normal flow. The script, using settings stored in autoreply.json, sends the auto-reply and re-injects the original email into Postfix for delivery.
+It supports authentication, StartTLS and HTML for the auto-reply.
 
-The look up table related to check_recipient_access is used for any mail received by SMTP but not for emails sent locally, using sendmail.
+The proposed Postfix configuration uses `check_recipient_access` to instruct Postfix to only pipe emails that are addressed to these qualifying email addresses to `autoreply.py`, while the rest continue their normal flow. The script, using settings stored in `autoreply.json`, sends the auto-reply and re-injects the original email into Postfix for delivery.
 
-autoreply.py could be easily adapted to do other things with the original email like extracting information or storing attachments.
+The look up table related to `check_recipient_access` is used for any mail received by SMTP but not for emails sent locally, using sendmail.
 
-The following sections provide a step-by-step guide on how to set up autoreply.py and Postfix to send auto-replies.
+`autoreply.py` could be easily adapted to do other things with the original email like extracting information or storing attachments.
+
+The following sections provide a step-by-step guide on how to set up `autoreply.py` and Postfix to send auto-replies.
 
 ## Background
 
@@ -76,22 +78,26 @@ nano autoreply.json
     "autoreply": [
         {
             "email": "foo@bar",
+            "from": "Foo Bar <foo@bar>",
             "reply-to": "foo@bar",
             "subject": "Subject here",
-            "body": "Email body here"
+            "body": "Email body here",
+            "html": false,
+            "_comment": "If you set html to true, set body to the full path of your html file"
         }
     ]
 }
 ```
-Edit:
+Explanation:
 * logging: true or false to enable/disable logging to ~/autoreply.log.
-* SMTP: if the server that will send the auto-reply emails is different from localhost.
-* port: the SMTP port if not using 25.
-* starttls: true to enable STARTTLS if required.
+* SMTP: server that will send the auto-reply emails.
+* port: SMTP port of the server.
+* starttls: true to enable STARTTLS.
 * smtpauth: true if authentication is required.
-* username: your username if authentication is required.
-* password: your password if authentication is required.
-* email: email addresses that you want to send an auto-reply from.
+* username: SMTP user.
+* password: SMTP user's password.
+* email: email address that would trigger an auto-reply.
+* from: email address that you want to show the auto-reply coming from.
 * reply-to: the reply-to email address the auto-reply receivers will see. Useful when using noreply@...
 
 5. If you want to add more email addresses, the JSON file would look something like this.
@@ -107,20 +113,26 @@ Edit:
     "autoreply": [
         {
             "email": "foo@bar",
+            "from": "Foo Bar <foo@bar>",
             "reply-to": "foo@bar",
             "subject": "Subject here",
-            "body": "Email body here"
+            "body": "/path/to/email.html",
+            "html": true,
+            "_comment": "If you set html to true, set body to the full path of your html file"
         },
         {
             "email": "foo2@bar",
+            "from": "Foo Bar <foo@bar>",
             "reply-to": "foo2@bar",
             "subject": "Subject here",
-            "body": "Email body here"
+            "body": "Email body here",
+            "html": false,
+            "_comment": "If you set html to true, set body to the full path of your html file"
         }
     ]
 }
 ```
-6. If you want to create an email file for testing, use ./autoreply.py -t and edit test.txt to change From, To and Reply-to accordingly.
+6. If you want to create an email file for testing, use `./autoreply.py -t` and edit `test.txt` to change `From`, `To` and `Reply-to` accordingly.
 ```shell
 ./autoreply.py -t
 nano test.txt
@@ -160,7 +172,7 @@ sudo postmap /etc/postfix/autoreply
 ```
 4. Back up main.cf.
 ```shell
-sudo cp /etc/postfix/main.cf /etc/postfix/main.cf.bak
+sudo cp /etc/postfix/main.{cf,cf.bak}
 ```
 5. Edit main.cf
 ```shell
@@ -189,4 +201,4 @@ autoreply unix  -       n       n       -       -       pipe
 ```shell
 sudo systemctl restart postfix
 ```
-You are ready to go. If everything has gone well, when Postfix receives emails that are addressed to your target auto-reply recipients, it will pass them to autoreply.py and the script will send the auto-reply email according to your configuration.
+You are ready to go. If everything went well, when Postfix receives emails that are addressed to your target auto-reply recipients, it will pass them to autoreply.py and the script will send the auto-reply email according to your configuration.
