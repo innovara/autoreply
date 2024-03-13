@@ -201,4 +201,4 @@ autoreply unix  -       n       n       -       -       pipe
 ```shell
 sudo systemctl restart postfix
 ```
-You are ready to go. If everything went well, when Postfix receives emails that are addressed to your target auto-reply recipients, it will pass them to autoreply.py and the script will send the auto-reply email according to your configuration.
+You are ready to go. If everything went well, when Postfix receives emails that are addressed to your target auto-reply recipients, it will pass them to `autoreply.py` and the script will send the auto-reply email according to your configuration.
