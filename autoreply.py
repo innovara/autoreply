@@ -240,7 +240,7 @@ def main():
     print(json.dumps(open_json(), indent=4))
   # Creates ~/test.txt if -t is passed
   if '-t' in sys.argv[1:]: 
-    t_message = generate_email('from@bar', 'to@bar', 'from@foo','This is a test email', 'This is an email to test autoreply.py', test=True)
+    t_message = generate_email('from@bar', 'to@bar', 'TEST-ID', 'from@foo','This is a test email', 'This is an email to test autoreply.py', None, test=True)
     with open(os.path.expanduser('~') + '/test.txt', 'w', encoding='utf-8') as t_email:
       t_email.write(str(t_message))
   # Exits if -b, -j, -l or -t were passed
