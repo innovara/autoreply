@@ -50,7 +50,7 @@ sudo chmod 700 /opt/autoreply
 ```
 sudo su - autoreply -s /bin/bash
 ```
-2. Download autoreply.py.
+2. Download `autoreply.py`.
 ```shell
 wget https://github.com/innovara/autoreply/raw/master/autoreply.py
 ```
@@ -153,8 +153,8 @@ exit
 
 Now, you have to edit the configuration of the Postfix server to pipe emails to the script.
 
-You could pipe all the emails to autoreply.py, but the script would unnecessarily handle a number of emails that would not trigger an auto-reply. 
-To avoid emails out of the scope of autoreply.py being piped to it, we use check_recipient_access under smtpd_recipient_restrictions in main.cf.
+You could pipe all the emails to `autoreply.py`, but the script would unnecessarily handle a number of emails that would not trigger an auto-reply. 
+To avoid emails out of the scope of `autoreply.py` being piped to it, we use `check_recipient_access` under `smtpd_recipient_restrictions` in `main.cf`.
 
 Bear in mind that, if there are multiple recipients, Postfix will pipe the email as long as at least one of them is in the lookup table. 
 
@@ -170,23 +170,23 @@ foo@bar FILTER autoreply:dummy
 ```shell
 sudo postmap /etc/postfix/autoreply
 ```
-4. Back up main.cf.
+4. Back up `main.cf`.
 ```shell
 sudo cp /etc/postfix/main.{cf,cf.bak}
 ```
-5. Edit main.cf
+5. Edit `main.cf`.
 ```shell
 sudo nano /etc/postfix/main.cf
 ```
-6. Add the new lookup table as the first item in smtpd_recipient_restrictions
+6. Add the new lookup table as the first item in `smtpd_recipient_restrictions`.
 ```
 smtpd_recipient_restrictions = check_recipient_access hash:/etc/postfix/autoreply
 ```
-7. Back up master.cf
+7. Back up `master.cf`.
 ```
 sudo cp /etc/postfix/master.{cf,cf.bak}
 ```
-8. Edit /etc/postfix/master.cf
+8. Edit `master.cf`.
 ```shell
 sudo nano /etc/postfix/master.cf
 ```
