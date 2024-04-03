@@ -244,7 +244,7 @@ def main():
     with open(os.path.expanduser('~') + '/test.txt', 'w', encoding='utf-8') as t_email:
       t_email.write(str(t_message))
   # Exits if -b, -j, -l or -t were passed
-  if '-b' or '-j' or '-l' or '-t' in sys.argv[1:]:
+  if '-b' in sys.argv[1:] or '-j' in sys.argv[1:] or '-l' in sys.argv[1:] or '-t' in sys.argv[1:]:
     sys.exit()
   # Reads script settings
   settings = open_json()
