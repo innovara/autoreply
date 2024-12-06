@@ -72,6 +72,7 @@ nano autoreply.json
     "SMTP": "localhost",
     "port": 25,
     "starttls": false,
+    "ssl": false,
     "smtpauth": false,
     "username": "user",
     "password": "pass",
@@ -93,6 +94,7 @@ Explanation:
 * SMTP: server that will send the auto-reply emails.
 * port: SMTP port of the server.
 * starttls: true to enable STARTTLS.
+* ssl: true to enable SSL when it is required from the beginning of the connection and using STARTTLS is not appropriate.
 * smtpauth: true if authentication is required.
 * username: SMTP user.
 * password: SMTP user's password.
@@ -108,6 +110,7 @@ Explanation:
     "SMTP": "localhost",
     "port": 25,
     "starttls": false,
+    "ssl": false,
     "smtpauth": false,
     "username": "user",
     "password": "pass",
@@ -132,6 +135,7 @@ Explanation:
     "SMTP": "localhost",
     "port": 25,
     "starttls": false,
+    "ssl": false,
     "smtpauth": false,
     "username": "user",
     "password": "pass",
