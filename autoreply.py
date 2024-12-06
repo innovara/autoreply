@@ -55,6 +55,7 @@ def create_json():
   data['SMTP'] = 'localhost'
   data['port'] = 25
   data['starttls'] = False
+  data['ssl'] = False
   data['smtpauth'] = False
   data['username'] = 'user'
   data['password'] = 'pass'
@@ -125,7 +126,8 @@ def generate_email(sender, recipient, original_id, replyto, subject, body, html,
 def send_email(message):
   '''Sends an email via SMTP server.'''
   settings = open_json()
-  mail_server = smtplib.SMTP(settings['SMTP'], settings['port'])
+  smtp_class = smtplib.SMTP if settings['ssl'] == False else smtplib.SMTP_SSL
+  mail_server = smtp_class(settings['SMTP'], settings['port'])
   if settings['starttls'] == True:
     mail_server.starttls()
   if settings['smtpauth'] == True:
