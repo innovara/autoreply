@@ -96,11 +96,12 @@ Explanation:
 * smtpauth: true if authentication is required.
 * username: SMTP user.
 * password: SMTP user's password.
-* email: email address that would trigger an auto-reply.
+* email: email address, or list of email addresses, that would trigger an auto-reply.
 * from: email address that you want to show the auto-reply coming from.
 * reply-to: the reply-to email address the auto-reply receivers will see. Useful when using noreply@...
 
-5. If you want to add more email addresses, the JSON file would look something like this.
+5. If you want to set up a few email addresses that share the same auto-reply configuration, the JSON file would look something like this.
+
 ```json
 {
     "logging": false,
@@ -112,9 +113,33 @@ Explanation:
     "password": "pass",
     "autoreply": [
         {
-            "email": "foo@bar",
+            "email": "foo1@bar, foo2@bar",
             "from": "Foo Bar <foo@bar>",
             "reply-to": "foo@bar",
+            "subject": "Subject here",
+            "body": "/path/to/email.html",
+            "html": true,
+            "_comment": "If you set html to true, set body to the full path of your html file"
+        }
+    ]
+}
+```
+
+6. If you want to set up various email addresses with different auto-reply configuration, the JSON file would look something like this.
+```json
+{
+    "logging": false,
+    "SMTP": "localhost",
+    "port": 25,
+    "starttls": false,
+    "smtpauth": false,
+    "username": "user",
+    "password": "pass",
+    "autoreply": [
+        {
+            "email": "foo1@bar",
+            "from": "Foo1 Bar <foo1@bar>",
+            "reply-to": "foo1@bar",
             "subject": "Subject here",
             "body": "/path/to/email.html",
             "html": true,
@@ -122,7 +147,7 @@ Explanation:
         },
         {
             "email": "foo2@bar",
-            "from": "Foo Bar <foo@bar>",
+            "from": "Foo2 Bar <foo2@bar>",
             "reply-to": "foo2@bar",
             "subject": "Subject here",
             "body": "Email body here",
@@ -132,19 +157,20 @@ Explanation:
     ]
 }
 ```
-6. If you want to create an email file for testing, use `./autoreply.py -t` and edit `test.txt` to change `From`, `To` and `Reply-to` accordingly.
+
+7. If you want to create an email file for testing, use `./autoreply.py -t` and edit `test.txt` to change `From`, `To` and `Reply-to` accordingly.
 ```shell
 ./autoreply.py -t
 nano test.txt
 ```
-7. Run a test from the command line.
+8. Run a test from the command line.
 ```
 ./autoreply.py from@bar to@bar < test.txt
 ```
 
 At this point, the recipient of the test email should have received the test email from the sender, and the sender an auto-reply message from the recipient.
 
-8. Exit autoreply shell
+9. Exit autoreply shell
 ```
 exit
 ```
