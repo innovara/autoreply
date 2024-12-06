@@ -64,8 +64,8 @@ def create_json():
     'email': 'foo@bar',
     'from': 'Foo Bar <foo@bar>',
     'reply-to': 'foo@bar',
-    'subject': 'Subject here',
-    'body': 'Email body here',
+    'subject': 'Subject here (Was: {ORIGINAL_SUBJECT})',
+    'body': 'Email body here, autoreplying for {ORIGINAL_DESTINATION}',
     'html': False,
     '_comment': 'If you set html to true, set body to the full path of your html file'
   })
@@ -104,12 +104,8 @@ def generate_email(sender, recipient, original_id, replyto, subject, body, html,
     message['Precedence'] = 'auto_reply'
   if html == False:
     message.set_content(body)
-  elif html == True:
-    try:
-      with open(body, encoding='utf-8') as html_body:
-        message.set_content(html_body.read(), subtype='html')
-    except FileNotFoundError:
-      log(str(body) + ' doesn\'t exist. Check path.')
+  else:
+    message.set_content(body, subtype='html')
   # Process the attachment and add it to the email
   if attachment_path != None:
     attachment_filename = os.path.basename(attachment_path)
@@ -181,7 +177,7 @@ def check_autoreply(message, original_id):
     return False
 
 
-def autoreply(sender, recipients, original_id):
+def autoreply(sender, recipients, original_msg, original_id):
   '''Sends auto-reply email from recipient to sender when the recipient is in ~/autoreply.json.'''
   settings = open_json()
   # Iterates through JSON autoreply objects
@@ -200,13 +196,26 @@ def autoreply(sender, recipients, original_id):
         # Checks if the auto-reply To and From are different to avoid an infinite loop
         if email != sender:
           # Generates and email message with the settings from ~/autoreply.json
+          subject = recipient['subject']
+          body = recipient['body']
+          if recipient['html'] == True:
+            try:
+              with open(body, encoding='utf-8') as html_body:
+                body = html_body.read()
+            except FileNotFoundError:
+              log(str(body) + ' doesn\'t exist. Check path.')
+
+          # Replace placeholders
+          subject = subject.replace("{ORIGINAL_SUBJECT}", original_msg["Subject"])
+          body = body.replace("{ORIGINAL_DESTINATION}", email)
+
           message = generate_email(
             recipient['from'],
             sender,
             original_id,
             recipient['reply-to'],
-            recipient['subject'],
-            recipient['body'],
+            subject,
+            body,
             recipient['html']
             )
           #Sends auto-reply email
@@ -278,7 +287,7 @@ def main():
   auto_submitted = check_autoreply(original_msg, original_id)
   if auto_submitted == False:
     # Sends the auto-reply
-    autoreply(sender, recipients, original_id)
+    autoreply(sender, recipients, original_msg, original_id)
 
 
 if __name__ == '__main__':
