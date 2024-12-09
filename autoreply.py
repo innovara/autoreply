@@ -20,6 +20,7 @@ def log(message):
     with open(log_file, 'a+', encoding='utf-8') as log:
       log.write(now + ': ' + message + '\n')
 
+
 def create_html():
   '''Creates ~/autoreply.html'''
   html_file = 'autoreply.html'
@@ -30,7 +31,7 @@ def create_html():
   <head></head>
   <body>
     <p>Thank you for contacting us.<p>
-    <p>We have received your message and will be in touch soon.</p>
+    <p>We have received your email to {ORIGINAL_DESTINATION} and we will be in touch soon.</p>
     <p>Regards,</p>
     <p><b>Your company</b></p>
     <!- Want a logo? Encode your image here: https://elmah.io/tools/base64-image-encoder (no affiliation whatsoever)
@@ -64,7 +65,7 @@ def create_json():
     'email': 'foo@bar',
     'from': 'Foo Bar <foo@bar>',
     'reply-to': 'foo@bar',
-    'subject': 'Subject here (Was: {ORIGINAL_SUBJECT})',
+    'subject': 'RE: {ORIGINAL_SUBJECT})',
     'body': 'Email body here, autoreplying for {ORIGINAL_DESTINATION}',
     'html': False,
     '_comment': 'If you set html to true, set body to the full path of your html file'
@@ -85,6 +86,12 @@ def open_json():
     create_json()
     sys.exit('couldn\'t find ~/autoreply.json. New template created.')
   return data
+
+
+def replace_holder(target, placeholder, object):
+  '''Replaces placeholders on the autoreply email to personalise them.'''
+  replacement = target.replace(placeholder, object)
+  return replacement
 
 
 def generate_email(sender, recipient, original_id, replyto, subject, body, html, attachment_path=None, test=False):
@@ -200,7 +207,6 @@ def autoreply(sender, recipients, original_msg, original_id):
         # Checks if the auto-reply To and From are different to avoid an infinite loop
         if email != sender:
           # Generates and email message with the settings from ~/autoreply.json
-          subject = recipient['subject']
           body = recipient['body']
           if recipient['html'] == True:
             try:
@@ -208,11 +214,10 @@ def autoreply(sender, recipients, original_msg, original_id):
                 body = html_body.read()
             except FileNotFoundError:
               log(str(body) + ' doesn\'t exist. Check path.')
-
-          # Replace placeholders
-          subject = subject.replace("{ORIGINAL_SUBJECT}", original_msg["Subject"])
-          body = body.replace("{ORIGINAL_DESTINATION}", email)
-
+          # Replaces placeholders
+          subject = replace_holder(recipient['subject'], '{ORIGINAL_SUBJECT}', original_msg['Subject'])
+          body = replace_holder(body, '{ORIGINAL_DESTINATION}', email)
+          # Generates auto-reply email object
           message = generate_email(
             recipient['from'],
             sender,
@@ -222,7 +227,7 @@ def autoreply(sender, recipients, original_msg, original_id):
             body,
             recipient['html']
             )
-          #Sends auto-reply email
+          # Sends auto-reply email
           send_email(message)
 
 
