@@ -100,7 +100,7 @@ def generate_email(sender, recipient, original_id, replyto, subject, body, html,
   # Email headers
   message['From'] = sender
   message['To'] = recipient
-  message['Subject'] = subject
+  message['Subject'] = subject.replace("\r", "").replace("\n", "")
   message['Message-ID'] = make_msgid()
   message['Reply-to'] = replyto
   if test == False:
