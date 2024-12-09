@@ -210,7 +210,7 @@ def autoreply(sender, recipients, original_msg, original_id):
               log(str(body) + ' doesn\'t exist. Check path.')
 
           # Replace placeholders
-          subject = subject.replace("{ORIGINAL_SUBJECT}", original_msg["Subject"])
+          subject = subject.replace("{ORIGINAL_SUBJECT}", original_msg["Subject"]).replace("\r", "").replace("\n", "")
           body = body.replace("{ORIGINAL_DESTINATION}", email)
 
           message = generate_email(
