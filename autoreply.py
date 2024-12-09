@@ -97,7 +97,8 @@ def generate_email(sender, recipient, original_id, replyto, subject, body, html,
   message['Message-ID'] = make_msgid()
   message['Reply-to'] = replyto
   if test == False:
-    message['In-Reply-To'] = original_id
+    if original_id:
+      message['In-Reply-To'] = original_id
     message['Auto-Submitted'] = 'auto-replied'
     message['X-Autoreply'] = 'yes'
     message['X-Auto-Response-Suppress'] = 'All'
@@ -280,11 +281,14 @@ def main():
   binary_msg = sys.stdin.buffer.read()
   # Message object
   original_msg = message_from_bytes(binary_msg)
-  original_id = (original_msg['Message-ID']).replace("\r","").replace("\n", "").replace(" ","")
+  try:
+    original_id = (original_msg['Message-ID']).replace("\r","").replace("\n", "").replace(" ","")
+  except:
+    original_id = None
   # Re-injects original email into Postfix.
   # If the purpose of the script was to do something else with the original email, re-injecting should be done later
-  reinject_email(binary_msg, sender, recipients, original_id)
-  auto_submitted = check_autoreply(original_msg, original_id)
+  reinject_email(binary_msg, sender, recipients, original_id or "without Message-ID")
+  auto_submitted = check_autoreply(original_msg, original_id or "without Message-ID")
   if auto_submitted == False:
     # Sends the auto-reply
     autoreply(sender, recipients, original_msg, original_id)
