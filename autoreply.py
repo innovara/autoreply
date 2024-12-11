@@ -183,6 +183,9 @@ def check_autoreply(message, original_id):
   elif message['X-Autoreply'] != None or message['X-Autorespond'] != None:
     log('X-Autoreply or X-Autorespond present, not sending autoreply')
     return True
+  elif 'noreply' in str(message['From']).lower():
+    log('From header is %s, not sending autoreply' % message['From'])
+    return True
   else:
     log('no autoreply or automated headers found on ' + str(original_id))
     return False
