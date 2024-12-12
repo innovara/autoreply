@@ -154,6 +154,10 @@ def reinject_email(message, sender, recipients, original_id):
   process = Popen(['/usr/sbin/sendmail', '-f', sender, '-G', '-oi', r_recipients], stdin=PIPE)
   process.communicate(message)
 
+def is_noreply(header):
+  name = str(header).split('@')[0].lower()
+  name = name.replace('-', '').replace('_', '').replace('.', '')
+  return 'noreply' in name or 'donotreply' in name or 'dontreply' in name
 
 def check_autoreply(message, original_id):
   '''Checks if an incoming email is an autoreply itself to avoid loops'''
@@ -183,7 +187,7 @@ def check_autoreply(message, original_id):
   elif message['X-Autoreply'] != None or message['X-Autorespond'] != None:
     log('X-Autoreply or X-Autorespond present, not sending autoreply')
     return True
-  elif 'noreply' in str(message['From']).lower():
+  elif is_noreply(message['From']):
     log('From header is %s, not sending autoreply' % message['From'])
     return True
   else:
