@@ -81,8 +81,8 @@ nano autoreply.json
             "email": "foo@bar",
             "from": "Foo Bar <foo@bar>",
             "reply-to": "foo@bar",
-            "subject": "Subject here",
-            "body": "Email body here",
+            "subject": "RE: {ORIGINAL_SUBJECT}",
+            "body": "Email body here, autoreply for {ORIGINAL_DESTINATION}",
             "html": false,
             "_comment": "If you set html to true, set body to the full path of your html file"
         }
@@ -101,6 +101,13 @@ Explanation:
 * email: email address, or list of email addresses, that would trigger an auto-reply.
 * from: email address that you want to show the auto-reply coming from.
 * reply-to: the reply-to email address the auto-reply receivers will see. Useful when using noreply@...
+* subject: the subject of the auto-reply email. Use {ORIGINAL_SUBJECT} to include the original subject from the sender.
+* body: text of auto-reply email when using plain-text format, or path to HTML file when using it. Use {ORIGINAL_DESTINATION}, here or on the HTML file, to include the email address of the recipient that triggered the autoreply.
+* html: true when using HTML auto-reply emails.
+
+Note about upgrades and the configuration file:
+
+`auto-reply.py` doesn't implement any version control nor is developed with much attention to issues arising from the script encountering previous versions of the configuration file. Therefore, the script can crash when a new setting is not present because of this. The recommendation when upgrading is to create a new JSON config file and to port the existing settings to it. And of course, it is expected that you will test this on a pre-production environment to ensure new changes won't break anything for you in production. If copying existing settings isn't a viable solution because of the size of your deployment, considering reaching out to us for a commercial engagement to further develop upgrade paths.
 
 5. If you want to set up a few email addresses that share the same auto-reply configuration, the JSON file would look something like this.
 
@@ -119,7 +126,7 @@ Explanation:
             "email": "foo1@bar, foo2@bar",
             "from": "Foo Bar <foo@bar>",
             "reply-to": "foo@bar",
-            "subject": "Subject here",
+            "subject": "RE: {ORIGINAL_SUBJECT}",
             "body": "/path/to/email.html",
             "html": true,
             "_comment": "If you set html to true, set body to the full path of your html file"
@@ -144,7 +151,7 @@ Explanation:
             "email": "foo1@bar",
             "from": "Foo1 Bar <foo1@bar>",
             "reply-to": "foo1@bar",
-            "subject": "Subject here",
+            "subject": "RE: {ORIGINAL_SUBJECT}",
             "body": "/path/to/email.html",
             "html": true,
             "_comment": "If you set html to true, set body to the full path of your html file"
@@ -153,8 +160,8 @@ Explanation:
             "email": "foo2@bar",
             "from": "Foo2 Bar <foo2@bar>",
             "reply-to": "foo2@bar",
-            "subject": "Subject here",
-            "body": "Email body here",
+            "subject": "RE: {ORIGINAL_SUBJECT}",
+            "body": "Email body here, autoreply for {ORIGINAL_DESTINATION}",
             "html": false,
             "_comment": "If you set html to true, set body to the full path of your html file"
         }

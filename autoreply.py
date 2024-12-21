@@ -65,7 +65,7 @@ def create_json():
     'email': 'foo@bar',
     'from': 'Foo Bar <foo@bar>',
     'reply-to': 'foo@bar',
-    'subject': 'RE: {ORIGINAL_SUBJECT})',
+    'subject': 'RE: {ORIGINAL_SUBJECT}',
     'body': 'Email body here, autoreplying for {ORIGINAL_DESTINATION}',
     'html': False,
     '_comment': 'If you set html to true, set body to the full path of your html file'
