@@ -154,13 +154,16 @@ def reinject_email(message, sender, recipients, original_id):
   process = Popen(['/usr/sbin/sendmail', '-f', sender, '-G', '-oi', r_recipients], stdin=PIPE)
   process.communicate(message)
 
-def is_noreply(header):
+
+def check_noreply(header):
+  '''Checks if an incoming email is a noreply-type address.'''
   name = str(header).split('@')[0].lower()
   name = name.replace('-', '').replace('_', '').replace('.', '')
   return 'noreply' in name or 'donotreply' in name or 'dontreply' in name
 
+
 def check_autoreply(message, original_id):
-  '''Checks if an incoming email is an autoreply itself to avoid loops'''
+  '''Checks if an incoming email is an autoreply itself to avoid loops.'''
   '''For more information please see https://www.arp242.net/autoreply.html'''
   # Defined in RFC 3834. ‘Official’ standard to indicate a message is an autoreply
   log('checking autoreply or automated headers on ' + str(original_id))
@@ -187,7 +190,7 @@ def check_autoreply(message, original_id):
   elif message['X-Autoreply'] != None or message['X-Autorespond'] != None:
     log('X-Autoreply or X-Autorespond present, not sending autoreply')
     return True
-  elif is_noreply(message['From']):
+  elif check_noreply(message['From']):
     log('From header is %s, not sending autoreply' % message['From'])
     return True
   else:
