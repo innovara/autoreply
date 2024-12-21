@@ -310,9 +310,4 @@ def main():
 
 
 if __name__ == '__main__':
-  try:
-    main()
-  except BaseException as exc:
-    import traceback
-    log("Unhandled exception: %s\n%s" % (exc.__class__.__name__, traceback.format_exc()))
-    raise
+   main()
