@@ -262,7 +262,7 @@ def main():
     './autoreply.py -l' to show the content of the JSON configuration file.\n\
     './autoreply.py -t' to generate a test email text file.\n\
     './autoreply.py from@bar to@bar < test.txt' to test autoreply.py. Note: edit test.txt first and replace from@bar and to@bar with your own\n")
-    exit()
+    sys.exit(0)
   # Creates ~/autoreply.html if -b is passed
   if '-b' in sys.argv[1:]:
     create_html()
@@ -279,7 +279,7 @@ def main():
       t_email.write(str(t_message))
   # Exits if -b, -j, -l or -t were passed
   if '-b' in sys.argv[1:] or '-j' in sys.argv[1:] or '-l' in sys.argv[1:] or '-t' in sys.argv[1:]:
-    sys.exit()
+    sys.exit(0)
   # Reads script settings
   settings = open_json()
   # Enables logging if 'logging': true
@@ -315,6 +315,8 @@ def main():
 if __name__ == '__main__':
   try:
     main()
+  except SystemExit:
+    sys.exit(0)
   except BaseException as exc:
     import traceback
     log("Unhandled exception: %s\n%s" % (exc.__class__.__name__, traceback.format_exc()))
