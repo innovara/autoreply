@@ -100,7 +100,7 @@ def generate_email(sender, recipient, original_id, replyto, subject, body, html,
   # Email headers
   message['From'] = sender
   message['To'] = recipient
-  message['Subject'] = subject.replace("\r", "").replace("\n", "")
+  message['Subject'] = subject.replace('\r', '').replace('\n', '')
   message['Message-ID'] = make_msgid()
   message['Reply-to'] = replyto
   if test == False:
@@ -254,6 +254,16 @@ def main():
   Use './autoreply.py -t' to generate a test email text file.
   Use './autoreply.py from@bar to@bar < test.txt' to test autoreply.py. Note: edit test.txt first and replace from@bar and to@bar with your own
   '''
+  # Reads script settings
+  settings = open_json()
+  # Enables logging if 'logging': true
+  # TODO: be able to set up logging on or off using autoreply.py
+  global logging
+  if settings['logging'] == True:
+    logging = True
+  else:
+    logging = False
+  log('autoreply.py has been invoked')
   # If no parameters are passed, it prints some help
   if len(sys.argv) < 2:
     print("Use:\n\
@@ -280,16 +290,6 @@ def main():
   # Exits if -b, -j, -l or -t were passed
   if '-b' in sys.argv[1:] or '-j' in sys.argv[1:] or '-l' in sys.argv[1:] or '-t' in sys.argv[1:]:
     sys.exit(0)
-  # Reads script settings
-  settings = open_json()
-  # Enables logging if 'logging': true
-  # TODO: be able to set up logging on or off using autoreply.py
-  global logging
-  if settings['logging'] == True:
-    logging = True
-  else:
-    logging = False
-  log('autoreply.py has been invoked')
   # Sender and recipients of the source email sent by Postfix as ./autoreply.py ${sender} ${recipient}
   # see README.md
   sender = sys.argv[1]
@@ -300,13 +300,13 @@ def main():
   # Message object
   original_msg = message_from_bytes(binary_msg)
   try:
-    original_id = (original_msg['Message-ID']).replace("\r","").replace("\n", "").replace(" ","")
+    original_id = (original_msg['Message-ID']).replace('\r','').replace('\n', '').replace(' ','')
   except:
     original_id = None
   # Re-injects original email into Postfix.
   # If the purpose of the script was to do something else with the original email, re-injecting should be done later
-  reinject_email(binary_msg, sender, recipients, original_id or "without Message-ID")
-  auto_submitted = check_autoreply(original_msg, original_id or "without Message-ID")
+  reinject_email(binary_msg, sender, recipients, original_id or 'without Message-ID')
+  auto_submitted = check_autoreply(original_msg, original_id or 'without Message-ID')
   if auto_submitted == False:
     # Sends the auto-reply
     autoreply(sender, recipients, original_msg, original_id)
@@ -319,5 +319,5 @@ if __name__ == '__main__':
     sys.exit(0)
   except BaseException as exc:
     import traceback
-    log("Unhandled exception: %s\n%s" % (exc.__class__.__name__, traceback.format_exc()))
+    log('Unhandled exception: %s\n%s' % (exc.__class__.__name__, traceback.format_exc()))
     raise
