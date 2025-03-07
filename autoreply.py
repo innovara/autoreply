@@ -37,7 +37,7 @@ def create_html():
     <!- Want a logo? Encode your image here: https://elmah.io/tools/base64-image-encoder (no affiliation whatsoever)
         and replace the base64 string accordingly -->
   <img src="data:image/png;base64,
-  iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAwXpUWHRSYXcgcHJvZmlsZSB0eXBlIGV4aWYAAHjabVBRDsMgCP3nFDsCAioex7Yu2Q12/KHSpm57CU/kkScC7f16wqODgoDErKmkhAYpUqhaojhRBweUwQNMroW1DpdAVuLeOa+avP+sh8tgHtWyeDPS3YVtFYq4v34Z+cPcJ+r54UZlv0YeQnCDOr+FqWi+f2FruEJnQCfRdeyfe7btHdHeYaLGgdGYOc0BuAcDVxNosFijseXIOji7mS3k355OwAfhmFkT34ZaJgAAAYRpQ0NQSUNDIHByb2ZpbGUAAHicfZE9SMNAGIbfppWKVAXtIOKQoTrZRUUctQpFqBBqhVYdTC79gyYNSYqLo+BacPBnserg4qyrg6sgCP6AuLo4KbpIid8lhRYx3nHcw3vf+3L3HSA0KkyzQrOApttmOpkQs7lVMfyKCPpohjAgM8uYk6QUfMfXPQJ8v4vzLP+6P0evmrcYEBCJZ5lh2sQbxNObtsF5nzjKSrJKfE48btIFiR+5rnj8xrnossAzo2YmPU8cJRaLHax0MCuZGvEUcUzVdMoXsh6rnLc4a5Uaa92TvzCS11eWuU5rBEksYgkSRCiooYwKbMRp10mxkKbzhI9/2PVL5FLIVQYjxwKq0CC7fvA/+N1bqzA54SVFEkDXi+N8jALhXaBZd5zvY8dpngDBZ+BKb/urDWDmk/R6W4sdAf3bwMV1W1P2gMsdYOjJkE3ZlYK0hEIBeD+jb8oBg7dAz5rXt9Y5Th+ADPUqdQMcHAJjRcpe93l3d2ff/q1p9e8HNl5yjq9GWD8AAA14aVRYdFhNTDpjb20uYWRvYmUueG1wAAAAAAA8P3hwYWNrZXQgYmVnaW49Iu+7vyIgaWQ9Ilc1TTBNcENlaGlIenJlU3pOVGN6a2M5ZCI/Pgo8eDp4bXBtZXRhIHhtbG5zOng9ImFkb2JlOm5zOm1ldGEvIiB4OnhtcHRrPSJYTVAgQ29yZSA0LjQuMC1FeGl2MiI+CiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogIDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSIiCiAgICB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIKICAgIHhtbG5zOnN0RXZ0PSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VFdmVudCMiCiAgICB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iCiAgICB4bWxuczpHSU1QPSJodHRwOi8vd3d3LmdpbXAub3JnL3htcC8iCiAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyIKICAgIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyIKICAgeG1wTU06RG9jdW1lbnRJRD0iZ2ltcDpkb2NpZDpnaW1wOmYwZWEwMzk0LTJjNzItNGRhZi1iOWNkLTJmODg2MzYzNGEwOSIKICAgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDphZjAwMDNhOC0yNDU3LTRmYjYtYjNiMy01MmVkOTVhZDdlM2EiCiAgIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo5MDM1YmU5ZC04OWJjLTQyN2YtODJjYi03NzRiZjc1MTU2NjQiCiAgIGRjOkZvcm1hdD0iaW1hZ2UvcG5nIgogICBHSU1QOkFQST0iMi4wIgogICBHSU1QOlBsYXRmb3JtPSJMaW51eCIKICAgR0lNUDpUaW1lU3RhbXA9IjE3MDI1NjI4ODc0MzQwMDEiCiAgIEdJTVA6VmVyc2lvbj0iMi4xMC4zNiIKICAgdGlmZjpPcmllbnRhdGlvbj0iMSIKICAgeG1wOkNyZWF0b3JUb29sPSJHSU1QIDIuMTAiCiAgIHhtcDpNZXRhZGF0YURhdGU9IjIwMjM6MTI6MTRUMTQ6MDg6MDcrMDA6MDAiCiAgIHhtcDpNb2RpZnlEYXRlPSIyMDIzOjEyOjE0VDE0OjA4OjA3KzAwOjAwIj4KICAgPHhtcE1NOkhpc3Rvcnk+CiAgICA8cmRmOlNlcT4KICAgICA8cmRmOmxpCiAgICAgIHN0RXZ0OmFjdGlvbj0ic2F2ZWQiCiAgICAgIHN0RXZ0OmNoYW5nZWQ9Ii8iCiAgICAgIHN0RXZ0Omluc3RhbmNlSUQ9InhtcC5paWQ6OTc3NTQ0YTItYjEyMi00NTVmLWJhMDEtZjFkMGI3YTc4N2U5IgogICAgICBzdEV2dDpzb2Z0d2FyZUFnZW50PSJHaW1wIDIuMTAgKExpbnV4KSIKICAgICAgc3RFdnQ6d2hlbj0iMjAyMy0xMi0xNFQxNDowODowNyswMDowMCIvPgogICAgPC9yZGY6U2VxPgogICA8L3htcE1NOkhpc3Rvcnk+CiAgPC9yZGY6RGVzY3JpcHRpb24+CiA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgCjw/eHBhY2tldCBlbmQ9InciPz6hgEyBAAAAllBMVEXNZFUAAACBgYGBgYGAgICFhYWAgICBgYGAgICAgICOjo6CgoKAgICAgICBgYGAgICAgICBgYGAgICAgICCgoKAgICBgYGAgICAgID/AACAgICDfHyId3fwDw+kW1vrFRX1CgrlGhq6RkbOMjLfICDBPj6yTk6YaGiOcnL8AwOeYWGrVVWTbW3+AQH5BwfZJibIODjUKytFbytpAAAAAXRSTlMAQObYZgAAAAFiS0dEAIgFHUgAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAHdElNRQfnDA4OCAe+mSkJAAAAs0lEQVRIx+2WSwrDMAwFc423MI5BW5H7364hNBCKP9JA6aazziD8Ikveth9hrbguvDQLCPX9+Y3XlaAOM6lpQBsZu4bsXeFwTfCjk9PUOB3L1ejWWRqnEz75IIOmEM+sFWTxz+d9IGXL1LhS4wF/BG1KYJmEnzmXjFKyR7kPoxR/BYUMfiVoGNCWoPnJFQMXmYwLMJTI6AMDloxxsizASiKLj6xXtMTJU+GqlH2QoGfPV3gBX0Gsgyg+EM0AAAAASUVORK5CYII=
+  iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAwXpUWHRSYXcgcHJvZmlsZSB0eXBlIGV4aWYAAHjabVBRDsMgCP3nFDsCAioex7Yu2Q12/KHSpm57CU/kkScC7f16wqODgoDErKmkhAYpUqhaojhRBweUwQNMroW1DpdAVuLeOa+avP+sh8tgHtWyeDPS3YVtFYq4v34Z+cPcJ+r54UZlv0YeQnCDOr+FqWi+f2FruEJnQCfRdeyfe7btHdHeYaLGgdGYOc0BuAcDVxNosFijseXIOji7mS3k355OwAfhmFkT34ZaJgAAAYRpQ0NQSUNDIHByb2ZpbGUAAHicfZE9SMNAGIbfppWKVAXtIOKQoTrZRUUctQpFqBBqhVYdTC79gyYNSYqLo+BacPBnserg4qyrg6sgCP6AuLo4KbpIid8lhRYx3nHcw3vf+3L3HSA0KkyzQrOApttmOpkQs7lVMfyKCPpohjAgM8uYk6QUfMfXPQJ8v4vzLP+6P0evmrcYEBCJZ5lh2sQbxNObtsF5nzjKSrJKfE48btIFiR+5rnj8xrnossAzo2YmPU8cJRaLHax0MCuZGvEUcUzVdMoXsh6rnLc4a5Uaa92TvzCS11eWuU5rBEksYgkSRCiooYwKbMRp10mxkKbzhI9/2PVL5FLIVQYjxwKq0CC7fvA/+N1bqzA54SVFEkDXi+N8jALhXaBZd5zvY8dpngDBZ+BKb/urDWDmk/R6W4sdAf3bwMV1W1P2gMsdYOjJkE3ZlYK0hEIBeD+jb8oBg7dAz5rXt9Y5Th+ADPUqdQMcHAJjRcpe93l3d2ff/q1p9e8HNl5yjq9GWD8AAA14aVRYdFhNTDpjb20uYWRvYmUueG1wAAAAAAA8P3hwYWNrZXQgYmVnaW49Iu+7vyIgaWQ9Ilc1TTBNcENlaGlIenJlU3pOVGN6a2M5ZCI/Pgo8eDp4bXBtZXRhIHhtbG5zOng9ImFkb2JlOm5zOm1ldGEvIiB4OnhtcHRrPSJYTVAgQ29yZSA0LjQuMC1FeGl2MiI+CiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogIDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSIiCiAgICB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIKICAgIHhtbG5zOnN0RXZ0PSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VFdmVudCMiCiAgICB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iCiAgICB4bWxuczpHSU1QPSJodHRwOi8vd3d3LmdpbXAub3JnL3htcC8iCiAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyIKICAgIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyIKICAgeG1wTU06RG9jdW1lbnRJRD0iZ2ltcDpkb2NpZDpnaW1wOmYwZWEwMzk0LTJjNzItNGRhZi1iOWNkLTJmODg2MzYzNGEwOSIKICAgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDphZjAwMDNhOC0yNDU3LTRmYjYtYjNiMy01MmVkOTVhZDdlM2EiCiAgIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo5MDM1YmU5ZC04OWJjLTQyN2YtODJjYi03NzRiZjc1MTU2NjQiCiAgIGRjOkZvcm1hdD0iaW1hZ2UvcG5nIgogICBHSU1QOkFQST0iMi4wIgogICBHSU1QOlBsYXRmb3JtPSJMaW51eCIKICAgR0lNUDpUaW1lU3RhbXA9IjE3MDI1NjI4ODc0MzQwMDEiCiAgIEdJTVA6VmVyc2lvbj0iMi4xMC4zNiIKICAgdGlmZjpPcmllbnRhdGlvbj0iMSIKICAgeG1wOkNyZWF0b3JUb29sPSJHSU1QIDIuMTAiCiAgIHhtcDpNZXRhZGF0YURhdGU9IjIwMjM6MTI6MTRUMTQ6MDg6MDcrMDA6MDAiCiAgIHhtcDpNb2RpZnlEYXRlPSIyMDIzOjEyOjE0VDE0OjA4OjA3KzAwOjAwIj4KICAgPHhtcE1NOkhpc3Rvcnk+CiAgICA8cmRmOlNlcT4KICAgICA8cmRmOmxpCiAgICAgIHN0RXZ0OmFjdGlvbj0ic2F2ZWQiCiAgICAgIHN0RXZ0OmNoYW5nZWQ9Ii8iCiAgICAgIHN0RXZ0Omluc3RhbmNlSUQ9InhtcC5paWQ6OTc3NTQ0YTItYjEyMi00NTVmLWJhMDEtZjFkMGI3YTc4N2U5IgogICAgICBzdEV2dDpzb2Z0d2FyZUFnZW50PSJHaW1wIDIuMTAgKExpbnV4KSIKICAgICAgc3RFdnQ6d2hlbj0iMjAyMy0xMi0xNFQxNDowODowNyswMDowMCIvPgogICAgPC9yZGY6U2VxPgogICA8L3htcE1NOkhpc3Rvcnk+CiAgPC9yZGY6RGVzY3JpcHRpb24+CiA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgCjw/eHBhY2tldCBlbmQ9InciPz6hgEyBAAAAllBMVEXNZFUAAACBgYGBgYGAgICFhYWAgICBgYGAgICAgICOjo6CgoKAgICAgICBgYGAgICAgICBgYGAgICAgICCgoKAgICBgYGAgICAgID/AACAgICDfHyId3fwDw+kW1vrFRX1CgrlGhq6RkbOMjLfICDBPj6yTk6YaGiOcnL8AwOeYWGrVVWTbW3+AQH5BwfZJibIODjUKytFbytpAAAAAXRSTlMAQObYZgAAAAFiS0dEAIgFHUgAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAHdElNRQfnDA4OCAe+mSkJAAAAs0lEQVRIx+2WSwrDMAwFc423MI5BW5H7364hNBCKP9JA6aazziD8Ikveth9hrbguvDQLCPX9+Y3XlaAOM6lpQBsZu4bsXeFwTfCjk9PUOB3L1ejWWRqnEz75IIOmEM+sFWTxz+d9IGXL1LhS4wF/BG1KYJmEnzmXjFKyR7kPoxR/BYUMfiVoGNCWoPnJFQMXmYwLMJTI6AMDloxxsizASiKLj6xXtMTJU+GqlH2QoGfPV3gBX0Gsgyg+EM0AAAAASUVORK5CYII=
   " alt="Red dot" />
   </body>
 </html>'''
@@ -61,6 +61,7 @@ def create_json():
   data['username'] = 'user'
   data['password'] = 'pass'
   data['autoreply'] = []
+  # Example for specific email address
   data['autoreply'].append({
     'email': 'foo@bar',
     'from': 'Foo Bar <foo@bar>',
@@ -69,6 +70,16 @@ def create_json():
     'body': 'Email body here, autoreplying for {ORIGINAL_DESTINATION}',
     'html': False,
     '_comment': 'If you set html to true, set body to the full path of your html file'
+  })
+  # Example for entire domain
+  data['autoreply'].append({
+    'domain': 'example.com',
+    'from': 'Example Company <noreply@example.com>',
+    'reply-to': 'support@example.com',
+    'subject': 'RE: {ORIGINAL_SUBJECT}',
+    'body': 'Thank you for contacting Example Company. Your email to {ORIGINAL_DESTINATION} has been received.',
+    'html': False,
+    '_comment': 'This will auto-reply to any email sent to *@example.com'
   })
   with open(json_path, 'w', encoding='utf-8') as out_file:
     json.dump(data, out_file, indent=4)
@@ -165,7 +176,7 @@ def check_noreply(header):
 def check_autoreply(message, original_id):
   '''Checks if an incoming email is an autoreply itself to avoid loops.'''
   '''For more information please see https://www.arp242.net/autoreply.html'''
-  # Defined in RFC 3834. ‘Official’ standard to indicate a message is an autoreply
+  # Defined in RFC 3834. 'Official' standard to indicate a message is an autoreply
   log('checking autoreply or automated headers on ' + str(original_id))
   if message['Auto-submitted'] != None and message['Auto-submitted'] != 'no':
     log('Auto-submitted present and not \'no\', not sending autoreply')
@@ -174,7 +185,7 @@ def check_autoreply(message, original_id):
   elif message['X-Auto-Response-Suppress'] in ('DR', 'AutoReply', 'All'):
     log('X-Auto-Response-Suppress is DR, AutoReply or All, not sending autoreply')
     return True
-  # Defined in RFC 2919. Most of the time you don’t want to send autoreplies to mailing lists or newsletters
+  # Defined in RFC 2919. Most of the time you don't want to send autoreplies to mailing lists or newsletters
   elif message['List-Id'] != None or message['List-Unsubscribe'] != None:
     log('List-Id or List-Unsubscribe present, not sending autoreply')
     return True
@@ -203,42 +214,63 @@ def autoreply(sender, recipients, original_msg, original_id):
   settings = open_json()
   # Iterates through JSON autoreply objects
   for recipient in settings['autoreply']:
-    # Checks if an email in ~/autoreply.json is in the list of recipients of the original email
-    emails = recipient['email']
-    if not isinstance(emails, list):
-      emails = [ emails ]
-    for email in emails:
-      if email in recipients:
-        log('autoreply triggered')
-        log('sender is ' + str(sender))
-        log('Message-Id is ' + str(original_id))
-        log('recipients are ' + str(recipients))
-        log('recipient that triggered the script is ' + str(email))
-        # Checks if the auto-reply To and From are different to avoid an infinite loop
-        if email != sender:
-          # Generates and email message with the settings from ~/autoreply.json
-          body = recipient['body']
-          if recipient['html'] == True:
-            try:
-              with open(body, encoding='utf-8') as html_body:
-                body = html_body.read()
-            except FileNotFoundError:
-              log(str(body) + ' doesn\'t exist. Check path.')
-          # Replaces placeholders
-          subject = replace_holder(recipient['subject'], '{ORIGINAL_SUBJECT}', original_msg['Subject'])
-          body = replace_holder(body, '{ORIGINAL_DESTINATION}', email)
-          # Generates auto-reply email object
-          message = generate_email(
-            recipient['from'],
-            sender,
-            original_id,
-            recipient['reply-to'],
-            subject,
-            body,
-            recipient['html']
-            )
-          # Sends auto-reply email
-          send_email(message)
+    # Check for exact email matches
+    if 'email' in recipient:
+      emails = recipient['email']
+      if not isinstance(emails, list):
+        emails = [emails]
+      for email in emails:
+        if email in recipients:
+          send_autoreply_message(sender, email, recipient, original_msg, original_id)
+    
+    # Check for domain matches
+    if 'domain' in recipient:
+      domains = recipient['domain']
+      if not isinstance(domains, list):
+        domains = [domains]
+      for domain in domains:
+        for recipient_email in recipients:
+          # Extract domain from recipient email
+          try:
+            recipient_domain = recipient_email.split('@')[1].lower()
+            if recipient_domain == domain.lower():
+              send_autoreply_message(sender, recipient_email, recipient, original_msg, original_id)
+          except IndexError:
+            # Skip invalid email addresses without @ symbol
+            log(f"Invalid email format: {recipient_email}")
+
+
+def send_autoreply_message(sender, recipient_email, recipient_config, original_msg, original_id):
+  '''Helper function to send an autoreply message.'''
+  log('autoreply triggered')
+  log('sender is ' + str(sender))
+  log('Message-Id is ' + str(original_id))
+  log('recipient that triggered the script is ' + str(recipient_email))
+  # Checks if the auto-reply To and From are different to avoid an infinite loop
+  if recipient_email != sender:
+    # Generates and email message with the settings from ~/autoreply.json
+    body = recipient_config['body']
+    if recipient_config['html'] == True:
+      try:
+        with open(body, encoding='utf-8') as html_body:
+          body = html_body.read()
+      except FileNotFoundError:
+        log(str(body) + ' doesn\'t exist. Check path.')
+    # Replaces placeholders
+    subject = replace_holder(recipient_config['subject'], '{ORIGINAL_SUBJECT}', original_msg['Subject'])
+    body = replace_holder(body, '{ORIGINAL_DESTINATION}', recipient_email)
+    # Generates auto-reply email object
+    message = generate_email(
+      recipient_config['from'],
+      sender,
+      original_id,
+      recipient_config['reply-to'],
+      subject,
+      body,
+      recipient_config['html']
+      )
+    # Sends auto-reply email
+    send_email(message)
 
 
 def main():
@@ -247,6 +279,10 @@ def main():
   - sys.argv[1] is the sender, passed by Postfix as ${sender}
   - sys.argv[2:] are the recipients, passed by Postfix as ${recipient}
   - original email message is piped by Postfix over STDIN
+
+  The script supports auto-replies for:
+  - Specific email addresses (using the 'email' field in autoreply.json)
+  - Entire domains (using the 'domain' field in autoreply.json)
 
   Use './autoreply.py -b' to generate a sample HTML body.
   Use './autoreply.py -j' to generate a JSON configuration file.

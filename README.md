@@ -1,71 +1,74 @@
 # autoreply.py
 
+> This is a fork of [innovara/autoreply](https://github.com/innovara/autoreply) with added support for domain-based auto-replies and other improvements.
+
 ## Introduction
 
-`autoreply.py` is a Postfix filter to send auto-reply emails when a message sent to a qualifying email address enters the Postfix mail system.
+`autoreply.py` is a Postfix filter that automatically sends reply emails when messages are sent to configured email addresses or domains. When an email enters the Postfix mail system addressed to a qualifying recipient, the script sends an auto-reply and then re-injects the original email for normal delivery.
 
-It supports authentication, StartTLS and HTML for the auto-reply.
+### Key Features
 
-The proposed Postfix configuration uses `check_recipient_access` to instruct Postfix to only pipe emails that are addressed to these qualifying email addresses to `autoreply.py`, while the rest continue their normal flow. The script, using settings stored in `autoreply.json`, sends the auto-reply and re-injects the original email into Postfix for delivery.
+- Supports specific email addresses and entire domains for auto-replies
+- Configurable via a simple JSON file
+- Supports SMTP authentication, StartTLS, and SSL
+- HTML or plain text auto-reply messages
+- Customizable templates with placeholders
+- Avoids auto-reply loops and respects email standards
 
-The look up table related to `check_recipient_access` is used for any mail received by SMTP but not for emails sent locally, using sendmail.
+## How It Works
 
-`autoreply.py` could be easily adapted to do other things with the original email like extracting information or storing attachments.
+The script integrates with Postfix using `check_recipient_access` to selectively process only relevant emails. When an email is received:
 
-The following sections provide a step-by-step guide on how to set up `autoreply.py` and Postfix to send auto-replies.
+1. Postfix checks if any recipient matches the configured auto-reply addresses/domains
+2. If matched, the email is piped to `autoreply.py`
+3. The script sends an auto-reply based on the configuration
+4. The original email is re-injected into Postfix for normal delivery
 
-## Background
+This approach ensures that only qualifying emails trigger the auto-reply process, while all other emails follow their normal delivery path.
 
-One of our clients had a complex email infrastructure and they wanted a script that would trigger auto-replies when emails sent to some specific addresses entered one of their MTAs. Normally, these auto-replies would have been configured at an MDA/mailbox level.
+## System Configuration
 
-The MTA in question was Postfix and it relayed all the emails to another SMTP server which they couldn't/wanted to configure differently.
+For security reasons, as recommended in [Postfix's FILTER documentation](http://www.postfix.org/FILTER_README.html), the script should run under a dedicated user account (not "nobody", "root", or "postfix").
 
-After some consideration, it was deemed viable to use an after-queue content filter in Postfix to achieve this.
-
-As the email addresses that would need to auto-reply would change over time, as well as the subjects and wording of the auto-reply emails, we decided to use a JSON file to store that information which could be changed without having to edit the script.
-
-## System configuration
-
-This section is somehow optional but please note that, as per [Postfix's FILTER documentation](http://www.postfix.org/FILTER_README.html), filter scripts should be run using a separate account, as these are handling potentially malicious emails. To quote their documentation, do not use "nobody", and most certainly do not use "root" or "postfix".
-
-1. Add autoreply user with home directory /opt/autoreply and nologin.
+1. Create a dedicated user:
 ```shell
 sudo useradd -d /opt/autoreply -s /usr/sbin/nologin autoreply
 ```
-2. Create autoreply's home directory.
+
+2. Set up the home directory:
 ```shell
 sudo mkdir /opt/autoreply
-```
-3. Change autoreply's home directory ownership.
-```shell
 sudo chown autoreply:autoreply /opt/autoreply
-```
-4. Restrict access to autoreply's home directory.
-```shell
 sudo chmod 700 /opt/autoreply
 ```
-## Script configuration
 
-1. Change to autoreply user.
-```
+## Script Installation and Configuration
+
+1. Switch to the autoreply user:
+```shell
 sudo su - autoreply -s /bin/bash
 ```
-2. Download `autoreply.py`.
+
+2. Download the script:
 ```shell
-wget https://github.com/innovara/autoreply/raw/master/autoreply.py
-```
-3. Change permissions.
-```shell
+wget https://github.com/mikaeljohannessen/autoreply/raw/master/autoreply.py
 chmod 700 autoreply.py
 ```
-3. Run ./autoreply.py -j to generate ~/autoreply.json.
-```
+
+3. Generate the configuration file:
+```shell
 ./autoreply.py -j
 ```
-4. Edit autoreply.json.
-```
+
+4. Edit the configuration file:
+```shell
 nano autoreply.json
 ```
+
+### Configuration Options
+
+The configuration file (`autoreply.json`) contains the following settings:
+
 ```json
 {
     "logging": false,
@@ -78,164 +81,182 @@ nano autoreply.json
     "password": "pass",
     "autoreply": [
         {
-            "email": "foo@bar",
-            "from": "Foo Bar <foo@bar>",
-            "reply-to": "foo@bar",
+            "email": "support@example.com",
+            "from": "Support Team <support@example.com>",
+            "reply-to": "support@example.com",
             "subject": "RE: {ORIGINAL_SUBJECT}",
-            "body": "Email body here, autoreply for {ORIGINAL_DESTINATION}",
+            "body": "Thank you for contacting our support team. We have received your email and will respond shortly.",
             "html": false,
-            "_comment": "If you set html to true, set body to the full path of your html file"
-        }
-    ]
-}
-```
-Explanation:
-* logging: true or false to enable/disable logging to ~/autoreply.log.
-* SMTP: server that will send the auto-reply emails.
-* port: SMTP port of the server.
-* starttls: true to enable STARTTLS.
-* ssl: true to enable SSL when it is required from the beginning of the connection and using STARTTLS is not appropriate.
-* smtpauth: true if authentication is required.
-* username: SMTP user.
-* password: SMTP user's password.
-* email: email address, or list of email addresses, that would trigger an auto-reply.
-* from: email address that you want to show the auto-reply coming from.
-* reply-to: the reply-to email address the auto-reply receivers will see. Useful when using noreply@...
-* subject: the subject of the auto-reply email. Use {ORIGINAL_SUBJECT} to include the original subject from the sender.
-* body: text of auto-reply email when using plain-text format, or path to HTML file when using it. Use {ORIGINAL_DESTINATION}, here or on the HTML file, to include the email address of the recipient that triggered the autoreply.
-* html: true when using HTML auto-reply emails.
-
-Note about upgrades and the configuration file:
-
-`auto-reply.py` doesn't implement any version control nor is developed with much attention to issues arising from the script encountering previous versions of the configuration file. Therefore, the script can crash when a new setting is not present because of this. The recommendation when upgrading is to create a new JSON config file and to port the existing settings to it. And of course, it is expected that you will test this on a pre-production environment to ensure new changes won't break anything for you in production. If copying existing settings isn't a viable solution because of the size of your deployment, considering reaching out to us for a commercial engagement to further develop upgrade paths.
-
-5. If you want to set up a few email addresses that share the same auto-reply configuration, the JSON file would look something like this.
-
-```json
-{
-    "logging": false,
-    "SMTP": "localhost",
-    "port": 25,
-    "starttls": false,
-    "ssl": false,
-    "smtpauth": false,
-    "username": "user",
-    "password": "pass",
-    "autoreply": [
-        {
-            "email": "foo1@bar, foo2@bar",
-            "from": "Foo Bar <foo@bar>",
-            "reply-to": "foo@bar",
-            "subject": "RE: {ORIGINAL_SUBJECT}",
-            "body": "/path/to/email.html",
-            "html": true,
-            "_comment": "If you set html to true, set body to the full path of your html file"
-        }
-    ]
-}
-```
-
-6. If you want to set up various email addresses with different auto-reply configuration, the JSON file would look something like this.
-```json
-{
-    "logging": false,
-    "SMTP": "localhost",
-    "port": 25,
-    "starttls": false,
-    "ssl": false,
-    "smtpauth": false,
-    "username": "user",
-    "password": "pass",
-    "autoreply": [
-        {
-            "email": "foo1@bar",
-            "from": "Foo1 Bar <foo1@bar>",
-            "reply-to": "foo1@bar",
-            "subject": "RE: {ORIGINAL_SUBJECT}",
-            "body": "/path/to/email.html",
-            "html": true,
             "_comment": "If you set html to true, set body to the full path of your html file"
         },
         {
-            "email": "foo2@bar",
-            "from": "Foo2 Bar <foo2@bar>",
-            "reply-to": "foo2@bar",
+            "domain": "example.com",
+            "from": "Example Company <noreply@example.com>",
+            "reply-to": "info@example.com",
             "subject": "RE: {ORIGINAL_SUBJECT}",
-            "body": "Email body here, autoreply for {ORIGINAL_DESTINATION}",
+            "body": "Thank you for contacting Example Company. Your email to {ORIGINAL_DESTINATION} has been received.",
             "html": false,
-            "_comment": "If you set html to true, set body to the full path of your html file"
+            "_comment": "This will auto-reply to any email sent to *@example.com"
         }
     ]
 }
 ```
 
-7. If you want to create an email file for testing, use `./autoreply.py -t` and edit `test.txt` to change `From`, `To` and `Reply-to` accordingly.
+#### Global Settings
+
+- `logging`: Enable/disable logging to `~/autoreply.log`
+- `SMTP`: Server that will send the auto-reply emails
+- `port`: SMTP port of the server
+- `starttls`: Enable STARTTLS for secure connections
+- `ssl`: Enable SSL for secure connections from the beginning
+- `smtpauth`: Enable SMTP authentication
+- `username`: SMTP username (if authentication is enabled)
+- `password`: SMTP password (if authentication is enabled)
+
+#### Auto-reply Configuration
+
+Each entry in the `autoreply` array can use either:
+
+- `email`: Specific email address(es) that trigger an auto-reply
+- `domain`: Domain name that triggers auto-replies for any address at that domain
+
+Other settings for each entry:
+
+- `from`: The sender address shown in the auto-reply
+- `reply-to`: The reply-to address for the auto-reply
+- `subject`: The subject line (can include `{ORIGINAL_SUBJECT}` placeholder)
+- `body`: The message content or path to HTML file (can include `{ORIGINAL_DESTINATION}` placeholder)
+- `html`: Set to `true` for HTML emails, `false` for plain text
+
+### Configuration Examples
+
+#### Multiple Email Addresses with the Same Configuration
+
+```json
+{
+    "autoreply": [
+        {
+            "email": ["support@example.com", "help@example.com"],
+            "from": "Support Team <support@example.com>",
+            "reply-to": "support@example.com",
+            "subject": "RE: {ORIGINAL_SUBJECT}",
+            "body": "/path/to/email.html",
+            "html": true
+        }
+    ]
+}
+```
+
+#### Different Configurations for Different Recipients
+
+```json
+{
+    "autoreply": [
+        {
+            "email": "sales@example.com",
+            "from": "Sales Team <sales@example.com>",
+            "reply-to": "sales@example.com",
+            "subject": "RE: {ORIGINAL_SUBJECT}",
+            "body": "/path/to/sales.html",
+            "html": true
+        },
+        {
+            "domain": "support.example.com",
+            "from": "Support <noreply@example.com>",
+            "reply-to": "support@example.com",
+            "subject": "RE: {ORIGINAL_SUBJECT}",
+            "body": "Thank you for contacting our support team at {ORIGINAL_DESTINATION}.",
+            "html": false
+        }
+    ]
+}
+```
+
+## Testing the Script
+
+1. Generate a test email:
 ```shell
 ./autoreply.py -t
-nano test.txt
-```
-8. Run a test from the command line.
-```
-./autoreply.py from@bar to@bar < test.txt
+nano test.txt  # Edit the test email as needed
 ```
 
-At this point, the recipient of the test email should have received the test email from the sender, and the sender an auto-reply message from the recipient.
-
-9. Exit autoreply shell
+2. Run a test:
+```shell
+./autoreply.py from@example.org to@example.com < test.txt
 ```
+
+3. Exit the autoreply shell:
+```shell
 exit
 ```
 
-## Postfix configuration
+## Postfix Integration
 
-Now, you have to edit the configuration of the Postfix server to pipe emails to the script.
+To integrate with Postfix, you need to configure it to pipe relevant emails to the script.
 
-You could pipe all the emails to `autoreply.py`, but the script would unnecessarily handle a number of emails that would not trigger an auto-reply. 
-To avoid emails out of the scope of `autoreply.py` being piped to it, we use `check_recipient_access` under `smtpd_recipient_restrictions` in `main.cf`.
-
-Bear in mind that, if there are multiple recipients, Postfix will pipe the email as long as at least one of them is in the lookup table. 
-
-1. Create a Postfix lookup table input file.
+1. Create a lookup table for auto-reply recipients:
 ```shell
 sudo nano /etc/postfix/autoreply
 ```
-2. Add one line per recipient:
+
+2. Add entries for each email address or domain:
 ```
-foo@bar FILTER autoreply:dummy
+support@example.com FILTER autoreply:dummy
+example.com         FILTER autoreply:dummy
 ```
-3. Create its corresponding Postfix lookup table.
+
+3. Generate the Postfix lookup table:
 ```shell
 sudo postmap /etc/postfix/autoreply
 ```
-4. Back up `main.cf`.
+
+4. Back up and edit `main.cf`:
 ```shell
 sudo cp /etc/postfix/main.{cf,cf.bak}
-```
-5. Edit `main.cf`.
-```shell
 sudo nano /etc/postfix/main.cf
 ```
-6. Add the new lookup table as the first item in `smtpd_recipient_restrictions`.
+
+5. Add the lookup table to `smtpd_recipient_restrictions`:
 ```
 smtpd_recipient_restrictions = check_recipient_access hash:/etc/postfix/autoreply
 ```
-7. Back up `master.cf`.
-```
-sudo cp /etc/postfix/master.{cf,cf.bak}
-```
-8. Edit `master.cf`.
+
+6. Back up and edit `master.cf`:
 ```shell
+sudo cp /etc/postfix/master.{cf,cf.bak}
 sudo nano /etc/postfix/master.cf
 ```
-9. Add the autoreply pipe at the end of the file. Edit user and script path if you are not following the instructions regarding system configuration. 
+
+7. Add the autoreply pipe at the end of the file:
 ```
 # autoreply pipe
 autoreply unix  -       n       n       -       -       pipe
   flags= user=autoreply null_sender=
   argv=/opt/autoreply/autoreply.py ${sender} ${recipient}
 ```
-10. Restart Postfix.
+
+8. Restart Postfix:
 ```shell
 sudo systemctl restart postfix
 ```
-You are ready to go. If everything went well, when Postfix receives emails that are addressed to your target auto-reply recipients, it will pass them to `autoreply.py` and the script will send the auto-reply email according to your configuration.
+
+## Upgrading
+
+When upgrading to a new version of `autoreply.py`, it's recommended to generate a new configuration file and transfer your existing settings to it:
+
+```shell
+./autoreply.py -j
+# Backup your existing configuration
+cp ~/autoreply.json ~/autoreply.json.bak
+# Edit the new configuration file with your settings
+nano ~/autoreply.json
+```
+
+## Troubleshooting
+
+If you encounter issues:
+
+1. Enable logging in `autoreply.json` by setting `"logging": true`
+2. Check the log file at `~/autoreply.log`
+3. Verify Postfix configuration with `sudo postfix check`
+4. Test the script directly with `./autoreply.py from@example.org to@example.com < test.txt`
