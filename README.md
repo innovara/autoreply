@@ -1,10 +1,8 @@
 # autoreply.py
 
-> This is a fork of [innovara/autoreply](https://github.com/innovara/autoreply) with added support for domain-based auto-replies and other improvements.
-
 ## Introduction
 
-`autoreply.py` is a Postfix filter that automatically sends reply emails when messages are sent to configured email addresses or domains. When an email enters the Postfix mail system addressed to a qualifying recipient, the script sends an auto-reply and then re-injects the original email for normal delivery.
+`autoreply.py` is a Postfix filter that sends automatic replies when emails sent to pre-configured address(es) and/or domain(s) enter the mail transfer agent. The script sends an auto-reply and then re-injects the original email for normal delivery.
 
 ### Key Features
 
@@ -28,7 +26,7 @@ This approach ensures that only qualifying emails trigger the auto-reply process
 
 ## System Configuration
 
-For security reasons, as recommended in [Postfix's FILTER documentation](http://www.postfix.org/FILTER_README.html), the script should run under a dedicated user account (not "nobody", "root", or "postfix").
+For security reasons, as recommended in [Postfix's FILTER documentation](http://www.postfix.org/FILTER_README.html), the script should be run with a dedicated user account (not "nobody", "root", or "postfix").
 
 1. Create a dedicated user:
 ```shell
@@ -51,7 +49,7 @@ sudo su - autoreply -s /bin/bash
 
 2. Download the script:
 ```shell
-wget https://github.com/mikaeljohannessen/autoreply/raw/master/autoreply.py
+wget https://github.com/innovara/autoreply/raw/master/autoreply.py
 chmod 700 autoreply.py
 ```
 
@@ -104,12 +102,12 @@ The configuration file (`autoreply.json`) contains the following settings:
 
 #### Global Settings
 
-- `logging`: Enable/disable logging to `~/autoreply.log`
-- `SMTP`: Server that will send the auto-reply emails
+- `logging`: enable/disable logging to `~/autoreply.log`
+- `SMTP`: server that will send the auto-reply emails
 - `port`: SMTP port of the server
-- `starttls`: Enable STARTTLS for secure connections
-- `ssl`: Enable SSL for secure connections from the beginning
-- `smtpauth`: Enable SMTP authentication
+- `starttls`: enable STARTTLS for secure connections
+- `ssl`: enable SSL for secure connections from the beginning
+- `smtpauth`: enable SMTP authentication
 - `username`: SMTP username (if authentication is enabled)
 - `password`: SMTP password (if authentication is enabled)
 
@@ -117,16 +115,16 @@ The configuration file (`autoreply.json`) contains the following settings:
 
 Each entry in the `autoreply` array can use either:
 
-- `email`: Specific email address(es) that trigger an auto-reply
-- `domain`: Domain name that triggers auto-replies for any address at that domain
+- `email`: specific email address(es) that trigger an auto-reply
+- `domain`: domain name that triggers auto-replies for any address at that domain
 
 Other settings for each entry:
 
-- `from`: The sender address shown in the auto-reply
-- `reply-to`: The reply-to address for the auto-reply
-- `subject`: The subject line (can include `{ORIGINAL_SUBJECT}` placeholder)
-- `body`: The message content or path to HTML file (can include `{ORIGINAL_DESTINATION}` placeholder)
-- `html`: Set to `true` for HTML emails, `false` for plain text
+- `from`: the sender address shown in the auto-reply
+- `reply-to`: the reply-to address for the auto-reply
+- `subject`: the subject line (can include `{ORIGINAL_SUBJECT}` placeholder)
+- `body`: the message content or path to HTML file (can include `{ORIGINAL_DESTINATION}` placeholder)
+- `html`: set to `true` for HTML emails, `false` for plain text
 
 ### Configuration Examples
 
@@ -192,7 +190,7 @@ exit
 
 ## Postfix Integration
 
-To integrate with Postfix, you need to configure it to pipe relevant emails to the script.
+To integrate `autoreply.py` into Postfix, you need to configure the later to pipe relevant emails to the filter.
 
 1. Create a lookup table for auto-reply recipients:
 ```shell
@@ -242,15 +240,18 @@ sudo systemctl restart postfix
 
 ## Upgrading
 
-When upgrading to a new version of `autoreply.py`, it's recommended to generate a new configuration file and transfer your existing settings to it:
+`auto-reply.py` doesn't implement any version control nor is developed with much attention to issues arising from the script encountering previous versions of the configuration file which can lead to crashes.
+
+When upgrading to a new version of `autoreply.py`, the recommendation is to create a new JSON config file and to port the existing settings to it:
 
 ```shell
 ./autoreply.py -j
 # Backup your existing configuration
-cp ~/autoreply.json ~/autoreply.json.bak
+cp ~/autoreply.{json,json.bak}
 # Edit the new configuration file with your settings
 nano ~/autoreply.json
 ```
+If copying existing settings isn't a viable solution because of the size of your deployment, consider reaching out to us for a commercial engagement to further develop upgrade paths.
 
 ## Troubleshooting
 

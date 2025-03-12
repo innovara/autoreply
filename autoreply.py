@@ -210,7 +210,8 @@ def check_autoreply(message, original_id):
 
 
 def autoreply(sender, recipients, original_msg, original_id):
-  '''Sends auto-reply email from recipient to sender when the recipient is in ~/autoreply.json.'''
+  '''Checks if an incoming email's recipient is in ~/autoreply.json.'''
+  '''Triggers auto-reply email if so.'''
   settings = open_json()
   # Iterates through JSON autoreply objects
   for recipient in settings['autoreply']:
@@ -221,7 +222,7 @@ def autoreply(sender, recipients, original_msg, original_id):
         emails = [emails]
       for email in emails:
         if email in recipients:
-          send_autoreply_message(sender, email, recipient, original_msg, original_id)
+          send_autoreply_email(sender, email, recipient, original_msg, original_id)
     
     # Check for domain matches
     if 'domain' in recipient:
@@ -234,14 +235,14 @@ def autoreply(sender, recipients, original_msg, original_id):
           try:
             recipient_domain = recipient_email.split('@')[1].lower()
             if recipient_domain == domain.lower():
-              send_autoreply_message(sender, recipient_email, recipient, original_msg, original_id)
+              send_autoreply_email(sender, recipient_email, recipient, original_msg, original_id)
           except IndexError:
             # Skip invalid email addresses without @ symbol
-            log(f"Invalid email format: {recipient_email}")
+            log(f'Invalid email format: {recipient_email}')
 
 
-def send_autoreply_message(sender, recipient_email, recipient_config, original_msg, original_id):
-  '''Helper function to send an autoreply message.'''
+def send_autoreply_email(sender, recipient_email, recipient_config, original_msg, original_id):
+  '''Sends auto-reply emails.'''
   log('autoreply triggered')
   log('sender is ' + str(sender))
   log('Message-Id is ' + str(original_id))

@@ -2,7 +2,7 @@
 import sys
 import os
 import json
-from autoreply import autoreply, send_autoreply_message
+from autoreply import autoreply, send_autoreply_email
 
 # Mock objects for testing
 class MockMessage:
